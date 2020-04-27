@@ -1,3 +1,0 @@
-# Debian-specific
-systemd_honor_MPDCONF.patch
-mpd.service.documentation.user.patch
