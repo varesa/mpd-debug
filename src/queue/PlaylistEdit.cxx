@@ -29,10 +29,14 @@
 #include "player/Control.hxx"
 #include "song/DetachedSong.hxx"
 #include "SongLoader.hxx"
+#include "util/Domain.hxx"
+#include "Log.hxx"
 
 #include <memory>
 
 #include <stdlib.h>
+
+static constexpr Domain player_domain("playlist");
 
 void
 playlist::OnModified()
@@ -232,6 +236,7 @@ playlist::DeleteInternal(PlayerControl &pc,
 		if (current >= 0 && !paused)
 			/* play the song after the deleted one */
 			try {
+				FormatDefault(playlist_domain, "playlist::DeleteInternal() -> PlayOrder()");
 				PlayOrder(pc, current);
 			} catch (...) {
 				/* TODO: log error? */

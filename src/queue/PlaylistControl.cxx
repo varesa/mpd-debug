@@ -118,6 +118,7 @@ playlist::PlayPosition(PlayerControl &pc, int song)
 	stop_on_error = false;
 	error_count = 0;
 
+	FormatDebug(playlist_domain, "playlist::PlayPosition() -> PlayOrder()");
 	PlayOrder(pc, i);
 }
 
@@ -174,6 +175,7 @@ playlist::PlayNext(PlayerControl &pc)
 			   discard them anyway */
 		}
 
+		FormatDebug(playlist_domain, "playlist::PlayNext() -> PlayOrder()");
 		PlayOrder(pc, next_order);
 	}
 
@@ -203,6 +205,7 @@ playlist::PlayPrevious(PlayerControl &pc)
 		order = current;
 	}
 
+	FormatDebug(playlist_domain, "PlayList::PlayPrevious() -> PlayOrder()");
 	PlayOrder(pc, order);
 }
 
