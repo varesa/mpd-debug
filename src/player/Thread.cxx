@@ -265,6 +265,7 @@ private:
 	 */
 	gcc_pure
 	bool IsDecoderAtNextSong() const noexcept {
+		FormatDefault(player_domain, "IsDecoderAtCurrentSong: %d", IsDecoderAtCurrentSong());
 		return dc.pipe != nullptr && !IsDecoderAtCurrentSong();
 	}
 
@@ -415,6 +416,7 @@ Player::ForwardDecoderError() noexcept
 void
 Player::ActivateDecoder() noexcept
 {
+	FormatDefault(player_domain, "Player::ActivateDecoder()");
 	assert(queued || pc.command == PlayerCommand::SEEK);
 	assert(pc.next_song != nullptr);
 
@@ -493,6 +495,7 @@ Player::OpenOutput() noexcept
 
 	output_open = true;
 	paused = false;
+	FormatDefault(player_domain, "Unpaused in Player::OpenOutput()");
 
 	pc.state = PlayerState::PLAY;
 
@@ -551,6 +554,7 @@ Player::CheckDecoderStartup() noexcept
 			buffering = true;
 		}
 
+		FormatDefault(player_domain, "Running OpenOutput() in CheckDecoderStartup()");
 		if (!paused && !OpenOutput()) {
 			FormatError(player_domain,
 				    "problems opening audio device "
@@ -646,6 +650,7 @@ Player::SeekDecoder() noexcept
 		if (!IsDecoderAtCurrentSong()) {
 			/* the decoder is already decoding the "next" song,
 			   but it is the same song file; exchange the pipe */
+			FormatDefault(player_domain, "Player::SeekDecoder() - replacing pipe");
 			ReplacePipe(dc.pipe);
 		}
 
@@ -717,6 +722,10 @@ Player::ProcessCommand() noexcept
 
 	case PlayerCommand::PAUSE:
 		paused = !paused;
+                if(!paused) {
+                       FormatDefault(player_domain, "Unpaused with PlayerCommand::PAUSE");
+                }
+
 		if (paused) {
 			pc.state = PlayerState::PAUSE;
 
@@ -908,6 +917,10 @@ Player::PlayNextChunk() noexcept
 		cross_fade_tag = nullptr;
 	}
 
+	if(paused) {
+		FormatDefault(player_domain, "playing while paused! This should not happen");
+	}
+
 	/* play the current chunk */
 
 	try {
@@ -953,6 +966,7 @@ Player::SongBorder() noexcept
 
 		FormatDefault(player_domain, "played \"%s\"", song->GetURI());
 
+		FormatDefault(player_domain, "Player::SongBorder() - replacing pipe");
 		ReplacePipe(dc.pipe);
 
 		pc.outputs.SongBorder();
@@ -961,11 +975,13 @@ Player::SongBorder() noexcept
 	ActivateDecoder();
 
 	const bool border_pause = pc.ApplyBorderPause();
+	FormatDefault(player_domain, "border_pause: \"%d\"", border_pause);
 	if (border_pause) {
 		paused = true;
 		pc.listener.OnBorderPause();
 		pc.outputs.Pause();
 		idle_add(IDLE_PLAYER);
+		FormatDefault(player_domain, "paused on song border, hopefully");
 	}
 }
 
@@ -986,7 +1002,7 @@ Player::Run() noexcept
 	while (ProcessCommand()) {
 		if (decoder_starting) {
 			/* wait until the decoder is initialized completely */
-
+			FormatDefault(player_domain, "ProcessCommand() decoder_starting");
 			if (!CheckDecoderStartup())
 				break;
 
@@ -1069,7 +1085,7 @@ Player::Run() noexcept
 			dc.WaitForDecoder();
 		} else if (IsDecoderAtNextSong()) {
 			/* at the beginning of a new song */
-
+			FormatDefault(player_domain, "Decoder at next song");
 			SongBorder();
 		} else if (dc.IsIdle()) {
 			if (queued)
