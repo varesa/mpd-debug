@@ -36,6 +36,11 @@
 #include "util/Exception.hxx"
 #include "util/Math.hxx"
 
+#include "util/Domain.hxx"
+#include "Log.hxx"
+static constexpr Domain player_domain("control");
+
+
 #ifdef ENABLE_DATABASE
 #include "db/update/Service.hxx"
 #endif
@@ -227,6 +232,7 @@ handle_next(Client &client, gcc_unused Request args, gcc_unused Response &r)
 		playlist.queue.single = single;
 	};
 
+	FormatDefault(player_domain, "handle_next() -> PlayNext()");
 	client.GetPartition().PlayNext();
 	return CommandResult::OK;
 }

@@ -23,9 +23,11 @@
 #include "player/Control.hxx"
 #include "song/DetachedSong.hxx"
 #include "SingleMode.hxx"
+
 #include "Log.hxx"
 
 #include <assert.h>
+
 
 void
 playlist::TagModified(DetachedSong &&song)
@@ -236,6 +238,7 @@ playlist::ResumePlayback(PlayerControl &pc)
 	else
 		/* continue playback at the next song */
 		try {
+			FormatDefault(playlist_domain, "playlist::ResumePlayback() -> PlayNext()");
 			PlayNext(pc);
 		} catch (...) {
 			/* TODO: log error? */
