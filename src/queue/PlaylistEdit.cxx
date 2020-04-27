@@ -36,7 +36,7 @@
 
 #include <stdlib.h>
 
-static constexpr Domain player_domain("playlist");
+static constexpr Domain playlist_domain("playlist");
 
 void
 playlist::OnModified()
