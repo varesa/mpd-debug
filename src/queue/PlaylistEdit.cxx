@@ -36,8 +36,6 @@
 
 #include <stdlib.h>
 
-static constexpr Domain playlist_domain("playlist");
-
 void
 playlist::OnModified()
 {
