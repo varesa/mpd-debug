@@ -441,6 +441,7 @@ Player::ActivateDecoder() noexcept
 	{
 		/* call syncPlaylistWithQueue() in the main thread */
 		const ScopeUnlock unlock(pc.mutex);
+		FormatDefault(player_domain, "Player::ActivateDecoder() calling OnPlayerSync");
 		pc.listener.OnPlayerSync();
 	}
 }
@@ -1177,6 +1178,7 @@ try {
 			{
 				const ScopeUnlock unlock(mutex);
 				do_play(*this, dc, buffer);
+				FormatDefault(player_domain, "PlayerControl::RunThread() calling OnPlayerSync");
 				listener.OnPlayerSync();
 			}
 

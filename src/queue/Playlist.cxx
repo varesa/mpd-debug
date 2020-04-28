@@ -203,19 +203,24 @@ playlist::SyncWithPlayer(PlayerControl &pc)
 		   should be restarted with the next song.  That can
 		   happen if the playlist isn't filling the queue fast
 		   enough */
-        FormatDefault(playlist_domain, "playlist::SyncWithPlayer() - resuming player)");
+        FormatDefault(playlist_domain, "playlist::SyncWithPlayer() - player stopped, resuming)");
 		ResumePlayback(pc);
     }
 	else {
+		FormatDefault(playlist_domain, "playlist::SyncWithPlayer() - player not stopped)");
 		/* check if the player thread has already started
 		   playing the queued song */
-		if (!i.has_next_song && queued != -1)
+		if (!i.has_next_song && queued != -1) {
+			FormatDefault(playlist_domain, "playlist::SyncWithPlayer() - playing queued song)");
 			QueuedSongStarted(pc);
+		}
 
 		/* make sure the queued song is always set (if
 		   possible) */
-		if (!pc.LockGetSyncInfo().has_next_song && queued < 0)
+		if (!pc.LockGetSyncInfo().has_next_song && queued < 0) {
+			FormatDefault(playlist_domain, "playlist::SyncWithPlayer() - updating queued song)");
 			UpdateQueuedSong(pc, nullptr);
+		}
 	}
 }
 
