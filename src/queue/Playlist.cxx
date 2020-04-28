@@ -198,12 +198,14 @@ playlist::SyncWithPlayer(PlayerControl &pc)
 
 	const auto i = pc.LockGetSyncInfo();
 
-	if (i.state == PlayerState::STOP)
+	if (i.state == PlayerState::STOP) {
 		/* the player thread has stopped: check if playback
 		   should be restarted with the next song.  That can
 		   happen if the playlist isn't filling the queue fast
 		   enough */
+        FormatDefault(playlist_domain, "playlist::SyncWithPlayer() - resuming player)");
 		ResumePlayback(pc);
+    }
 	else {
 		/* check if the player thread has already started
 		   playing the queued song */
@@ -226,8 +228,11 @@ playlist::ResumePlayback(PlayerControl &pc)
 	const auto error = pc.GetErrorType();
 	if (error == PlayerError::NONE)
 		error_count = 0;
-	else
-		++error_count;
+	else {
+        ++error_count;
+        FormatDefault(playlist_domain, "playlist::ResumePlayback() - stopped due to an error?)");
+
+    }
 
 	if ((stop_on_error && error != PlayerError::NONE) ||
 	    error == PlayerError::OUTPUT ||
