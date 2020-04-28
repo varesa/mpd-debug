@@ -40,6 +40,7 @@ PlayerControl::PlayerControl(PlayerListener &_listener,
 	 thread(BIND_THIS_METHOD(RunThread)),
 	 replay_gain_config(_replay_gain_config)
 {
+    LogDefault(player_domain, "PlayerControl::PlayerControl() -> state initialized to STOP");
 }
 
 PlayerControl::~PlayerControl() noexcept

@@ -1142,6 +1142,7 @@ Player::Run() noexcept
 		pc.next_song.reset();
 	}
 
+	FormatDefault(player_domain, "Player::Run() reached end, stopping");
 	pc.state = PlayerState::STOP;
 }
 

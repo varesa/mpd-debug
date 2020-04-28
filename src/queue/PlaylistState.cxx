@@ -144,8 +144,11 @@ playlist_state_restore(const StateFileConfig &config,
 		state = PlayerState::PLAY;
 	else if (strcmp(line, PLAYLIST_STATE_FILE_STATE_PAUSE) == 0)
 		state = PlayerState::PAUSE;
-	else
+	else {
+		LogWarning(playlist_domain, "playlist_state_restore -> state = STOP");
 		state = PlayerState::STOP;
+	}
+
 
 	while ((line = file.ReadLine()) != nullptr) {
 		const char *p;
