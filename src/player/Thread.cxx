@@ -690,7 +690,10 @@ Player::SeekDecoder() noexcept
 inline bool
 Player::ProcessCommand() noexcept
 {
-	FormatDefault(player_domain, "ProcessCommand: %i", pc.command);
+	if (pc.command != PlayerCommand::NONE) {
+		FormatDefault(player_domain, "ProcessCommand: %i", pc.command);
+	}
+
 	switch (pc.command) {
 	case PlayerCommand::NONE:
 		break;
@@ -1004,7 +1007,6 @@ Player::Run() noexcept
 	pc.CommandFinished();
 
 	while (ProcessCommand()) {
-		FormatDefault(player_domain, "Player::Run() processing command");
 		if (decoder_starting) {
 			/* wait until the decoder is initialized completely */
 			FormatDefault(player_domain, "ProcessCommand() decoder_starting");
