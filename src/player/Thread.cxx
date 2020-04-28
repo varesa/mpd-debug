@@ -1095,7 +1095,9 @@ Player::Run() noexcept
 			FormatDefault(player_domain, "Decoder at next song");
 			SongBorder();
 		} else if (dc.IsIdle()) {
-			if (queued)
+			FormatDefault(player_domain, "Decoder is idle and pipe was empty");
+			if (queued) {
+				FormatDefault(player_domain, "Queue not empty, trying again");
 				/* the decoder has just stopped,
 				   between the two IsIdle() checks,
 				   probably while UnlockCheckOutputs()
@@ -1104,11 +1106,15 @@ Player::Run() noexcept
 				   playback completely, let's re-enter
 				   this loop */
 				continue;
+			}
+
+			FormatDefault(player_domain, "Queue was empty");
 
 			/* check the size of the pipe again, because
 			   the decoder thread may have added something
 			   since we last checked */
 			if (pipe->IsEmpty()) {
+				FormatDefault(player_domain, "Pipe was empty");
 				/* wait for the hardware to finish
 				   playback */
 				const ScopeUnlock unlock(pc.mutex);
