@@ -656,6 +656,7 @@ Player::SeekDecoder() noexcept
 		}
 
 		pc.next_song.reset();
+		FormatDefault(player_domain, "Player::SeekDecoder() - clearing 'queued'");
 		queued = false;
 
 		if (decoder_starting) {
