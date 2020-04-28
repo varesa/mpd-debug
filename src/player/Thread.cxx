@@ -416,7 +416,7 @@ Player::ForwardDecoderError() noexcept
 void
 Player::ActivateDecoder() noexcept
 {
-	FormatDefault(player_domain, "Player::ActivateDecoder()");
+	FormatDefault(player_domain, "Player::ActivateDecoder(), clearing 'queued'");
 	assert(queued || pc.command == PlayerCommand::SEEK);
 	assert(pc.next_song != nullptr);
 
@@ -764,6 +764,7 @@ Player::ProcessCommand() noexcept
 			StopDecoder();
 
 		pc.next_song.reset();
+		FormatDefault(player_domain, "PlayerCommand::CANCEL - clearing 'queued'");
 		queued = false;
 		pc.CommandFinished();
 		break;
