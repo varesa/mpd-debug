@@ -690,6 +690,7 @@ Player::SeekDecoder() noexcept
 inline bool
 Player::ProcessCommand() noexcept
 {
+	FormatDefault(player_domain, "ProcessCommand: %i", pc.command);
 	switch (pc.command) {
 	case PlayerCommand::NONE:
 		break;
@@ -965,7 +966,7 @@ Player::SongBorder() noexcept
 	{
 		const ScopeUnlock unlock(pc.mutex);
 
-		FormatDefault(player_domain, "played \"%s\"", song->GetURI());
+		FormatDefault(player_domain, "(SongBorder) played \"%s\"", song->GetURI());
 
 		FormatDefault(player_domain, "Player::SongBorder() - replacing pipe");
 		ReplacePipe(dc.pipe);
@@ -989,6 +990,8 @@ Player::SongBorder() noexcept
 inline void
 Player::Run() noexcept
 {
+	FormatDefault(player_domain, "Player::Run() starting");
+
 	pipe = std::make_shared<MusicPipe>();
 
 	const std::lock_guard<Mutex> lock(pc.mutex);
@@ -1001,6 +1004,7 @@ Player::Run() noexcept
 	pc.CommandFinished();
 
 	while (ProcessCommand()) {
+		FormatDefault(player_domain, "Player::Run() processing command");
 		if (decoder_starting) {
 			/* wait until the decoder is initialized completely */
 			FormatDefault(player_domain, "ProcessCommand() decoder_starting");
@@ -1132,15 +1136,18 @@ Player::Run() noexcept
 	cross_fade_tag.reset();
 
 	if (song != nullptr) {
-		FormatDefault(player_domain, "played \"%s\"", song->GetURI());
+		FormatDefault(player_domain, "(Player::Run) played \"%s\"", song->GetURI());
 		song.reset();
 	}
 
 	pc.ClearTaggedSong();
 
 	if (queued) {
+		FormatDefault(player_domain, "Player::Run() queued song exists");
 		assert(pc.next_song != nullptr);
 		pc.next_song.reset();
+	} else {
+		FormatDefault(player_domain, "Player::Run() no queued song");
 	}
 
 	FormatDefault(player_domain, "Player::Run() reached end, stopping");
