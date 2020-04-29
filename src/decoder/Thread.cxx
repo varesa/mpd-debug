@@ -552,6 +552,7 @@ DecoderControl::RunThread() noexcept
 			replay_gain_db = 0;
 
 			decoder_run(*this);
+			LogDefault(decoder_thread_domain, "Decoder finished (start)");
 
 			if (state == DecoderState::ERROR) {
 				try {
@@ -573,6 +574,7 @@ DecoderControl::RunThread() noexcept
 			pipe->Clear();
 
 			decoder_run(*this);
+			LogDefault(decoder_thread_domain, "Decoder finished (seek)");
 			break;
 
 		case DecoderCommand::STOP:
@@ -584,4 +586,6 @@ DecoderControl::RunThread() noexcept
 			break;
 		}
 	} while (command != DecoderCommand::NONE || !quit);
+
+	LogDefault(decoder_thread_domain, "Decoder exited");
 }
