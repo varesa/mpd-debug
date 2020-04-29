@@ -539,6 +539,7 @@ Player::CheckDecoderStartup() noexcept
 		if (pending_seek > SongTime::zero()) {
 			assert(pc.seeking);
 
+            LogDefault(player_domain, "Seeking from CheckDecoderStartup()");
 			bool success = SeekDecoder(pending_seek);
 			pc.seeking = false;
 			pc.ClientSignal();
@@ -670,7 +671,7 @@ Player::SeekDecoder() noexcept
 			return true;
 		} else {
 			/* send the SEEK command */
-
+            LogDefault(player_domain, "SeekDecoder() -> SeekDecoder(time)");
 			if (!SeekDecoder(pc.seek_time)) {
 				pc.CommandFinished();
 				return false;
@@ -749,6 +750,7 @@ Player::ProcessCommand() noexcept
 		break;
 
 	case PlayerCommand::SEEK:
+        LogDefault(player_domain, "Seeking from PlayerCommand::SEEK");
 		return SeekDecoder();
 
 	case PlayerCommand::CANCEL:
