@@ -30,6 +30,8 @@
 #include "Chrono.hxx"
 #include "ReplayGainConfig.hxx"
 #include "ReplayGainMode.hxx"
+#include "util/Domain.hxx"
+#include "Log.hxx"
 
 #include <exception>
 #include <utility>
@@ -37,6 +39,8 @@
 
 #include <assert.h>
 #include <stdint.h>
+
+static constexpr Domain player_domain_("player");
 
 /* damn you, windows.h! */
 #ifdef ERROR
@@ -327,6 +331,7 @@ public:
 
 	gcc_pure
 	bool IsSeekableCurrentSong(const DetachedSong &_song) const noexcept {
+		FormatDefault(player_domain_, "IsSeekableCurrentSong() seekable: %i iscurrent: %i", seekable, IsCurrentSong(_song));
 		return seekable && IsCurrentSong(_song);
 	}
 
