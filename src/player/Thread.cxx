@@ -629,6 +629,7 @@ Player::SeekDecoder() noexcept
 	idle_add(IDLE_PLAYER);
 
 	if (!dc.IsSeekableCurrentSong(*pc.next_song)) {
+		LogDefault(player_domain, "Player::SeekDecoder() - Track A");
 		/* the decoder is already decoding the "next" song -
 		   stop it and start the previous song again */
 
@@ -649,6 +650,7 @@ Player::SeekDecoder() noexcept
 
 		return true;
 	} else {
+		LogDefault(player_domain, "Player::SeekDecoder() - Track B");
 		if (!IsDecoderAtCurrentSong()) {
 			/* the decoder is already decoding the "next" song,
 			   but it is the same song file; exchange the pipe */
