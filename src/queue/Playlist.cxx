@@ -164,8 +164,10 @@ playlist::UpdateQueuedSong(PlayerControl &pc, const DetachedSong *prev)
 	}
 
 	if (next_order >= 0) {
-		if (next_song != prev)
+		if (next_song != prev) {
+			LogDebug(playlist_domain, "playlist::UpdateQueuedSong() -> QueueSongOrder()");
 			QueueSongOrder(pc, next_order);
+		}
 		else
 			queued = next_order;
 	}

@@ -238,7 +238,7 @@ playlist::SeekSongOrder(PlayerControl &pc, unsigned i, SongTime seek_time)
 		UpdateQueuedSong(pc, nullptr);
 		throw;
 	}
-	
+
 	LogDebug(playlist_domain, "playlist::SeekSongOrder() -> UpdateQueuedSong()");
 	UpdateQueuedSong(pc, nullptr);
 }

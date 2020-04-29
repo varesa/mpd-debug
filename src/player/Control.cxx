@@ -257,14 +257,17 @@ PlayerControl::EnqueueSongLocked(std::unique_ptr<DetachedSong> song) noexcept
 void
 PlayerControl::SeekLocked(std::unique_ptr<DetachedSong> song, SongTime t)
 {
+	LogDefault(player_domain, "PlayerControl::SeekLocked()");
 	assert(song != nullptr);
 
 	/* to issue the SEEK command below, we need to clear the
 	   "next_song" attribute with the CANCEL command */
 	/* optimization TODO: if the decoder happens to decode that
 	   song already, don't cancel that */
-	if (next_song != nullptr)
+	if (next_song != nullptr) {
+		LogDefault(player_domain, "PlayerControl::SeekLocked() -> PlayerCommand::CANCEL");
 		SynchronousCommand(PlayerCommand::CANCEL);
+	}
 
 	assert(next_song == nullptr);
 
