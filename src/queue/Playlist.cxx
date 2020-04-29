@@ -203,9 +203,9 @@ playlist::SyncWithPlayer(PlayerControl &pc)
 		   should be restarted with the next song.  That can
 		   happen if the playlist isn't filling the queue fast
 		   enough */
-        FormatDefault(playlist_domain, "playlist::SyncWithPlayer() - player stopped, resuming)");
+		FormatDefault(playlist_domain, "playlist::SyncWithPlayer() - player stopped, resuming)");
 		ResumePlayback(pc);
-    }
+	}
 	else {
 		FormatDefault(playlist_domain, "playlist::SyncWithPlayer() - player not stopped)");
 		/* check if the player thread has already started
