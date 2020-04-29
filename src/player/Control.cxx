@@ -69,6 +69,7 @@ PlayerControl::Play(std::unique_ptr<DetachedSong> song)
 	assert(song != nullptr);
 
 	const std::lock_guard<Mutex> protect(mutex);
+	LogDefault(player_domain, "PlayerControl::Play() -> SeekLocked()");
 	SeekLocked(std::move(song), SongTime::zero());
 
 	if (state == PlayerState::PAUSE)
@@ -296,6 +297,7 @@ PlayerControl::LockSeek(std::unique_ptr<DetachedSong> song, SongTime t)
 	assert(song != nullptr);
 
 	const std::lock_guard<Mutex> protect(mutex);
+	LogDefault(player_domain, "PlayerControl::LockSeek() -> SeekLocked()");
 	SeekLocked(std::move(song), t);
 }
 

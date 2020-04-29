@@ -219,6 +219,7 @@ playlist::SeekSongOrder(PlayerControl &pc, unsigned i, SongTime seek_time)
 	error_count = 0;
 
 	if (!playing || (unsigned)current != i) {
+		LogDebug(playlist_domain, "playlist::SeekSongOrder(), not in current song");
 		/* seeking is not within the current song - prepare
 		   song change */
 
@@ -231,12 +232,14 @@ playlist::SeekSongOrder(PlayerControl &pc, unsigned i, SongTime seek_time)
 	queued = -1;
 
 	try {
+		LogDebug(playlist_domain, "playlist::SeekSongOrder() -> LockSeek()");
 		pc.LockSeek(std::make_unique<DetachedSong>(queue.GetOrder(i)), seek_time);
 	} catch (...) {
 		UpdateQueuedSong(pc, nullptr);
 		throw;
 	}
-
+	
+	LogDebug(playlist_domain, "playlist::SeekSongOrder() -> UpdateQueuedSong()");
 	UpdateQueuedSong(pc, nullptr);
 }
 
