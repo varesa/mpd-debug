@@ -537,6 +537,8 @@ DecoderControl::RunThread() noexcept
 {
 	SetThreadName("decoder");
 
+	LogDefault(decoder_thread_domain, "Starting decoder thread");
+
 	const std::lock_guard<Mutex> protect(mutex);
 
 	do {
